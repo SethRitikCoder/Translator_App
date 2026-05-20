@@ -17,15 +17,44 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     "French": "fr",
   };
   final translator = GoogleTranslator();
+
   Future tranlateText() async {
-    var translation = await translator.translate(
-      textController.text,
-      from: fromLanguage,
-      to: toLanguage,
-    );
-    setState(() {
-      translatedText = translation.text;
-    });
+    if(textController.text.trim().isEmpty)return;
+    try {
+      var translation = await translator.translate(
+        textController.text,
+        from: fromLanguage,
+        to: toLanguage,
+      );
+      setState(() {
+        translatedText = translation.text;
+      });
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "You Are Offline Please Check Your Internet Connection",
+              style: TextStyle(fontFamily: "Roboto"),
+            ),
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.red.shade400,
+            behavior: SnackBarBehavior.floating,
+            elevation: 2.0,
+
+            action: SnackBarAction(
+              label: "Retry",
+              textColor: Colors.white,
+
+              onPressed: () {
+                tranlateText();
+              },
+            ),
+          ),
+        );
+      }
+    }
   }
 
   void swapFunction() {
@@ -171,37 +200,51 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                 SizedBox(height: screenHeight * 0.02),
                 Padding(
                   padding: const EdgeInsets.only(right: 20, left: 20),
-                  child: Container(
-                    height: screenHeight * .20,
-                    width: screenwidth,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color.fromRGBO(0, 168, 132, 2),
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 5,
-                        bottom: 5,
-                        left: 5,
-                        right: 5,
-                      ),
-                      child: TextField(
-                        controller: textController,
 
-                        maxLines: 10,
+                  child: TextField(
+                    controller: textController,
 
-                        decoration: InputDecoration(
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
+                    maxLines: 10,
+
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(8),
+                      suffixIcon: textController.text.isNotEmpty
+                          ? IconButton(
+                              onPressed: () {
+                                textController.clear();
+                                setState(() {
+                                  translatedText = "";
+                                });
+                              },
+                              icon: Icon(Icons.clear),
+                            )
+                          : null,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(0, 168, 132, 2),
+                          width: 2,
                         ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(0, 168, 132, 2),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(0, 168, 132, 2),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
                 ),
+
                 SizedBox(height: screenHeight * 0.02),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -217,7 +260,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                       buttonName: "ClearData",
                       callback: () {
                         setState(() {
-                          textController.text = "";
+                          // textController.text = "";
+                          textController.clear();
+                          translatedText = "";
                         });
                       },
                     ),

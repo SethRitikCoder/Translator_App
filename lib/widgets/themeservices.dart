@@ -19,7 +19,7 @@ class Themeservices {
         titleTextStyle: TextStyle(
           fontSize: 23,
           color: Colors.white,
-          fontStyle: FontStyle.values[3],
+          fontStyle: FontStyle.normal,
           fontFamily: "Caveat",
           fontWeight: FontWeight.bold,
         ),
@@ -33,7 +33,7 @@ class Themeservices {
         bodyMedium: TextStyle(
           fontSize: 16,
           color: Colors.black,
-          fontStyle: FontStyle.values[3],
+          fontStyle: FontStyle.normal,
           fontFamily: "Caveat",
           fontWeight: FontWeight.bold,
         ),
