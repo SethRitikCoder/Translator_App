@@ -208,10 +208,15 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 
                   child: TextField(
                     controller: textController,
+                    showCursor: true,
+                    cursorHeight: 18,
+                    maxLength: 1000,
 
                     maxLines: 10,
 
                     decoration: InputDecoration(
+                      fillColor: Colors.grey.shade200,
+                      filled: true,
                       isDense: true,
                       contentPadding: EdgeInsets.all(8),
                       suffixIcon: textController.text.isNotEmpty
@@ -228,7 +233,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color.fromRGBO(0, 168, 132, 2),
-                          width: 2,
+                          width: 3,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
