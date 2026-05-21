@@ -16,10 +16,11 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     "Spanish": "es",
     "French": "fr",
   };
+  bool isLoading = false;
   final translator = GoogleTranslator();
 
   Future tranlateText() async {
-    if(textController.text.trim().isEmpty)return;
+    if (textController.text.trim().isEmpty) return;
     try {
       var translation = await translator.translate(
         textController.text,
@@ -28,8 +29,12 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       );
       setState(() {
         translatedText = translation.text;
+        isLoading = false;
       });
     } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
       if (mounted) {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -253,6 +258,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                       buttonName: "Translate",
                       callback: () {
                         tranlateText();
+                        isLoading = true;
+                        setState(() {});
                       },
                     ),
                     SizedBox(width: screenwidth * 0.03),
@@ -283,10 +290,12 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Center(
-                      child: SelectableText(
-                        translatedText,
-                        style: TextStyle(fontSize: 17),
-                      ),
+                      child: isLoading
+                          ? CircularProgressIndicator()
+                          : SelectableText(
+                              translatedText,
+                              style: TextStyle(fontSize: 17),
+                            ),
                     ),
                   ),
                 ),
