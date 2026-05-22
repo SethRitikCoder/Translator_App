@@ -19,7 +19,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   bool isLoading = false;
   final translator = GoogleTranslator();
 
-  Future tranlateText() async {
+  Future translateText() async {
     if (textController.text.trim().isEmpty) return;
     try {
       var translation = await translator.translate(
@@ -37,26 +37,13 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       });
       if (mounted) {
         ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "You Are Offline Please Check Your Internet Connection",
-              style: TextStyle(fontFamily: "Roboto"),
-            ),
-            duration: Duration(seconds: 2),
-            backgroundColor: Colors.red.shade400,
-            behavior: SnackBarBehavior.floating,
-            elevation: 2.0,
-
-            action: SnackBarAction(
-              label: "Retry",
-              textColor: Colors.white,
-
-              onPressed: () {
-                tranlateText();
-              },
-            ),
-          ),
+        Uihelper.commonToast(
+          context,
+          data: "You Are Offline Please Check Your Internet Connection",
+          labelName: "Retry",
+          callback: () {
+            translateText();
+          },
         );
       }
     }
@@ -85,7 +72,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       appBar: AppBar(
         title: Text('Translator App'),
         centerTitle: true,
-        backgroundColor: Color.fromRGBO(0, 168, 132, 2),
+        backgroundColor: Uihelper.customColor(),
 
         titleTextStyle: TextStyle(
           fontSize: 23,
@@ -102,46 +89,19 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  height: 40,
+                Uihelper.customDropdown(
+                  disablecolor: Uihelper.customColor(),
+                  enablecolor: Uihelper.customColor(),
 
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Color.fromRGBO(0, 168, 132, 2),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: DropdownButton(
-                      alignment: Alignment.center,
-                      value: fromLanguage,
-                      iconEnabledColor: Color.fromRGBO(0, 168, 132, 2),
-                      focusColor: Theme.of(context).cardColor,
-                      dropdownColor: Theme.of(context).canvasColor,
-                      iconDisabledColor: Color.fromRGBO(0, 168, 132, 2),
-                      items: languages.entries
-                          .map(
-                            (entry) => DropdownMenuItem(
-                              value: entry.value,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(entry.key),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          fromLanguage = value!;
-                        });
-                      },
-                    ),
-                  ),
+                  initialvalue: fromLanguage,
+                  mapdata: languages,
+                  onchanged: (String? value) {
+                    setState(() {
+                      fromLanguage = value!;
+                    });
+                  },
                 ),
+
                 SizedBox(width: screenwidth * 0.10),
                 IconButton(
                   onPressed: () {
@@ -149,51 +109,23 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                   },
                   icon: Icon(
                     Icons.swap_horiz,
-                    color: Color.fromRGBO(0, 168, 132, 2),
+                    color: Uihelper.customColor(),
                     size: 30,
                   ),
                 ),
                 SizedBox(width: screenwidth * 0.10),
 
-                Container(
-                  height: 40,
+                Uihelper.customDropdown(
+                  disablecolor: Uihelper.customColor(),
+                  enablecolor: Uihelper.customColor(),
 
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Color.fromRGBO(0, 168, 132, 2),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: DropdownButton(
-                      alignment: AlignmentGeometry.center,
-                      value: toLanguage,
-                      iconEnabledColor: Color.fromRGBO(0, 168, 132, 2),
-                      focusColor: Colors.blueGrey,
-                      dropdownColor: Theme.of(context).canvasColor,
-                      iconDisabledColor: Color.fromRGBO(0, 168, 132, 2),
-                      items: languages.entries
-                          .map(
-                            (entry) => DropdownMenuItem(
-                              value: entry.value,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(entry.key),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          toLanguage = value!;
-                        });
-                      },
-                    ),
-                  ),
+                  initialvalue: toLanguage,
+                  mapdata: languages,
+                  onchanged: (String? value) {
+                    setState(() {
+                      toLanguage = value!;
+                    });
+                  },
                 ),
               ],
             ),
@@ -232,21 +164,21 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                           : null,
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color.fromRGBO(0, 168, 132, 2),
+                          color: Uihelper.customColor(),
                           width: 3,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color.fromRGBO(0, 168, 132, 2),
+                          color: Uihelper.customColor(),
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color.fromRGBO(0, 168, 132, 2),
+                          color: Uihelper.customColor(),
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(10),
@@ -262,7 +194,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                     Uihelper.customButton(
                       buttonName: "Translate",
                       callback: () {
-                        tranlateText();
+                        translateText();
                         isLoading = true;
                         setState(() {});
                       },
@@ -289,7 +221,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color.fromRGBO(0, 168, 132, 2),
+                        color: Uihelper.customColor(),
                         width: 2,
                       ),
                       borderRadius: BorderRadius.circular(12),
